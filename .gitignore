@@ -1,6 +1,7 @@
 HELP.md
 .gradle
 build/
+course/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
@@ -35,3 +36,7 @@ out/
 
 ### VS Code ###
 .vscode/
+/src/main/resources/application.yml
+/gradle/wrapper/gradle-wrapper.jar
+/gradle/wrapper/gradle-wrapper.properties
+/src/test/java/com/example/demo/DemoApplicationTests.java

@@ -2,11 +2,16 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Task;
 import com.example.demo.repository.TaskRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
 @RestController
-public class TaskController {
+@RequestMapping("/tasks")
+public class TaskController extends HandleErrorService {
 
     @Autowired
     private TaskRepository taskRepository;
@@ -16,34 +21,37 @@ public class TaskController {
         return taskRepository.save(task);
     }
 
-    @PatchMapping("/tasks/{id}")
-    public void patchDoneMethod(@PathVariable Long id, @RequestBody Task task){
-        if (task.isDone()) taskRepository.markAsDone(id);
+    @PatchMapping("/{id}")
+    public void patchDoneMethod(
+            @PathVariable Long id,
+            @Valid @RequestBody Task task
+    ){
+        if (!task.isDone()) taskRepository.markAsDone(id);
     }
 
-    @PatchMapping("/tasks/{id}:mark-as-done")
+    @PatchMapping("/{id}:mark-as-done")
     public void patchDoneMethod(@PathVariable Long id){
         taskRepository.markAsDone(id);
     }
 
-    @PutMapping("/tasks/{id}")
+    @PutMapping("/{id}")
     public Task update(@PathVariable Long id, @RequestBody Task task){
         task.setId(id);
         return taskRepository.save(task);
     }
 
-    @DeleteMapping("/tasks/{id}")
-    public void delete(@PathVariable long id) {//удалить запись по id
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable long id) {
         taskRepository.deleteById(id);
     }
 
-    @GetMapping("/tasks/{id}")
-    public Task get(@PathVariable long id) {//получить запись по id
-        return (Task) taskRepository.findById(id).orElse(null);
+    @GetMapping("/{id}")
+    public Task get(@PathVariable long id) {
+        return (Task) taskRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 
-    @GetMapping("/tasks")
-    public Iterable<Task> get() {//получить все записи
+    @GetMapping("")
+    public List<Task> get() {
         return taskRepository.findAll();
     }
 }

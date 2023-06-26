@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -19,7 +20,7 @@ public interface TaskRepository extends PagingAndSortingRepository<Task, Long> {
 
     Optional<Object> findById(long id);
 
-    Iterable<Task> findAll();
+    List<Task> findAll();
 
     @Modifying
     @Query("UPDATE Task t SET t.done = true where t.id = :id")
